@@ -28,6 +28,23 @@ type Product struct {
 	Status string
 }
 
+func NewProduct(name string, price ...float64) *Product {
+	product := &Product{
+		ID:     uuid.NewString(),
+		Name:   name,
+		Price:  0,
+		Status: Disabled,
+	}
+
+	if len(price) != 0 {
+		return product
+	}
+
+	product.Price = price[0]
+
+	return product
+}
+
 func (p *Product) IsValid() (bool, error) {
 	if p.Status == "" {
 		p.Status = Disabled
