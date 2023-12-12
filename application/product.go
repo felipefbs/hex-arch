@@ -16,6 +16,19 @@ type IProduct interface {
 	GetPrice() float64
 }
 
+type IProductReader interface {
+	Get(id string) (IProduct, error)
+}
+
+type IProductWriter interface {
+	Save(product IProduct) (IProduct, error)
+}
+
+type IProductPersistence interface {
+	IProductReader
+	IProductWriter
+}
+
 const (
 	Disabled = "disabled"
 	Enabled  = "enabled"
