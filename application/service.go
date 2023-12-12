@@ -28,10 +28,23 @@ func (svc *ProductService) Create(name string, price float64) (IProduct, error) 
 		return nil, err
 	}
 
-	result, err := svc.Persistence.Save(product)
+	return svc.Persistence.Save(product)
+}
+
+func (svc *ProductService) Enable(product IProduct) (IProduct, error) {
+	err := product.Enable()
 	if err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	return svc.Persistence.Save(product)
+}
+
+func (svc *ProductService) Disable(product IProduct) (IProduct, error) {
+	err := product.Disable()
+	if err != nil {
+		return nil, err
+	}
+
+	return svc.Persistence.Save(product)
 }

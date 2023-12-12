@@ -36,4 +36,22 @@ func TestProductService(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotEmpty(t, productSaved)
 	})
+
+	t.Run("Enable product", func(t *testing.T) {
+		persistence.EXPECT().Save(gomock.Any()).Return(product, nil).AnyTimes()
+		product.EXPECT().Enable().Return(nil).AnyTimes()
+
+		productSaved, err := svc.Enable(product)
+		assert.Nil(t, err)
+		assert.NotEmpty(t, productSaved)
+	})
+
+	t.Run("Disable product", func(t *testing.T) {
+		persistence.EXPECT().Save(gomock.Any()).Return(product, nil).AnyTimes()
+		product.EXPECT().Disable().Return(nil).AnyTimes()
+
+		productSaved, err := svc.Disable(product)
+		assert.Nil(t, err)
+		assert.NotEmpty(t, productSaved)
+	})
 }
