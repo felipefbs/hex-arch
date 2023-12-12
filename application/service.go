@@ -19,3 +19,19 @@ func (svc *ProductService) Get(id string) (IProduct, error) {
 
 	return product, nil
 }
+
+func (svc *ProductService) Create(name string, price float64) (IProduct, error) {
+	product := NewProduct(name, price)
+
+	err := product.IsValid()
+	if err != nil {
+		return nil, err
+	}
+
+	result, err := svc.Persistence.Save(product)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

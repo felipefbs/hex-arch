@@ -5,9 +5,9 @@ import (
 
 	"github.com/felipefbs/hex-arch/application"
 	mock_application "github.com/felipefbs/hex-arch/application/mocks"
-	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
 
 func TestProductService(t *testing.T) {
@@ -17,13 +17,23 @@ func TestProductService(t *testing.T) {
 	product := mock_application.NewMockIProduct(ctrl)
 	persistence := mock_application.NewMockIProductPersistence(ctrl)
 
-	persistence.EXPECT().Get(gomock.Any()).Return(product, nil).AnyTimes()
-
 	svc := application.ProductService{
 		Persistence: persistence,
 	}
 
-	productFound, err := svc.Get(uuid.NewString())
-	assert.Nil(t, err)
-	assert.NotEmpty(t, productFound)
+	t.Run("Get product", func(t *testing.T) {
+		persistence.EXPECT().Get(gomock.Any()).Return(product, nil).AnyTimes()
+
+		productFound, err := svc.Get(uuid.NewString())
+		assert.Nil(t, err)
+		assert.NotEmpty(t, productFound)
+	})
+
+	t.Run("Save product", func(t *testing.T) {
+		persistence.EXPECT().Save(gomock.Any()).Return(product, nil).AnyTimes()
+
+		productSaved, err := svc.Create("testProduct", 10.0)
+		assert.Nil(t, err)
+		assert.NotEmpty(t, productSaved)
+	})
 }
