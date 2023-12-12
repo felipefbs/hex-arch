@@ -7,7 +7,7 @@ import (
 )
 
 type IProduct interface {
-	IsValid() (bool, error)
+	IsValid() error
 	Enable() error
 	Disable() error
 	GetID() string
@@ -58,29 +58,29 @@ func NewProduct(name string, price ...float64) *Product {
 	return product
 }
 
-func (p *Product) IsValid() (bool, error) {
+func (p *Product) IsValid() error {
 	if p.Status == "" {
 		p.Status = Disabled
 	}
 
 	if p.Status != Enabled && p.Status != Disabled {
-		return false, errors.New("the status must be enabled or disabled")
+		return errors.New("the status must be enabled or disabled")
 	}
 
 	if p.Price < 0 {
-		return false, errors.New("the price must be greater or equal zero")
+		return errors.New("the price must be greater or equal zero")
 	}
 
 	_, err := uuid.Parse(p.ID)
 	if err != nil {
-		return false, errors.New("invalid id")
+		return errors.New("invalid id")
 	}
 
 	if p.Name == "" {
-		return false, errors.New("invalid name")
+		return errors.New("invalid name")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (p *Product) Enable() error {

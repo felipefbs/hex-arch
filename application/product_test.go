@@ -73,9 +73,8 @@ func TestProductValidation(t *testing.T) {
 			Status: application.Enabled,
 		}
 
-		isValid, err := product.IsValid()
+		err := product.IsValid()
 		assert.Nil(t, err)
-		assert.True(t, isValid)
 	})
 
 	t.Run("Invalid Product - ID", func(t *testing.T) {
@@ -86,10 +85,9 @@ func TestProductValidation(t *testing.T) {
 			Status: application.Enabled,
 		}
 
-		isValid, err := product.IsValid()
+		err := product.IsValid()
 		assert.NotNil(t, err)
 		assert.ErrorContains(t, err, "invalid id")
-		assert.False(t, isValid)
 	})
 
 	t.Run("Invalid Product - Name", func(t *testing.T) {
@@ -100,10 +98,9 @@ func TestProductValidation(t *testing.T) {
 			Status: application.Enabled,
 		}
 
-		isValid, err := product.IsValid()
+		err := product.IsValid()
 		assert.NotNil(t, err)
 		assert.ErrorContains(t, err, "invalid name")
-		assert.False(t, isValid)
 	})
 
 	t.Run("Invalid Product - Price", func(t *testing.T) {
@@ -114,10 +111,9 @@ func TestProductValidation(t *testing.T) {
 			Status: application.Enabled,
 		}
 
-		isValid, err := product.IsValid()
+		err := product.IsValid()
 		assert.NotNil(t, err)
 		assert.ErrorContains(t, err, "the price must be greater or equal zero")
-		assert.False(t, isValid)
 	})
 
 	t.Run("Invalid Product - Status", func(t *testing.T) {
@@ -128,9 +124,8 @@ func TestProductValidation(t *testing.T) {
 			Status: "INVALID",
 		}
 
-		isValid, err := product.IsValid()
+		err := product.IsValid()
 		assert.NotNil(t, err)
 		assert.ErrorContains(t, err, "the status must be enabled or disabled")
-		assert.False(t, isValid)
 	})
 }
