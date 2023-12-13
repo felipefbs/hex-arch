@@ -1,14 +1,11 @@
 package application
 
-type IProductService interface {
-	Get(id string) (IProduct, error)
-	Create(name string, price float64) (IProduct, error)
-	Enable(product IProduct) (IProduct, error)
-	Disable(product IProduct) (IProduct, error)
-}
-
 type ProductService struct {
 	Persistence IProductPersistence
+}
+
+func NewProductService(repo IProductPersistence) IProductService {
+	return &ProductService{Persistence: repo}
 }
 
 func (svc *ProductService) Get(id string) (IProduct, error) {

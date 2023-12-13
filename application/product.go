@@ -2,9 +2,17 @@ package application
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 )
+
+type IProductService interface {
+	Get(id string) (IProduct, error)
+	Create(name string, price float64) (IProduct, error)
+	Enable(product IProduct) (IProduct, error)
+	Disable(product IProduct) (IProduct, error)
+}
 
 type IProduct interface {
 	IsValid() error
@@ -14,6 +22,7 @@ type IProduct interface {
 	GetName() string
 	GetStatus() string
 	GetPrice() float64
+	String() string
 }
 
 type IProductReader interface {
@@ -119,4 +128,8 @@ func (p *Product) GetStatus() string {
 
 func (p *Product) GetPrice() float64 {
 	return p.Price
+}
+
+func (p Product) String() string {
+	return fmt.Sprintf("ID: %v, Name: %v, Status:%v, Price:%v", p.ID, p.Name, p.Status, p.Price)
 }

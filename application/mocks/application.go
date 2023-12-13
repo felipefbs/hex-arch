@@ -15,6 +15,89 @@ import (
 	gomock "go.uber.org/mock/gomock"
 )
 
+// MockIProductService is a mock of IProductService interface.
+type MockIProductService struct {
+	ctrl     *gomock.Controller
+	recorder *MockIProductServiceMockRecorder
+}
+
+// MockIProductServiceMockRecorder is the mock recorder for MockIProductService.
+type MockIProductServiceMockRecorder struct {
+	mock *MockIProductService
+}
+
+// NewMockIProductService creates a new mock instance.
+func NewMockIProductService(ctrl *gomock.Controller) *MockIProductService {
+	mock := &MockIProductService{ctrl: ctrl}
+	mock.recorder = &MockIProductServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIProductService) EXPECT() *MockIProductServiceMockRecorder {
+	return m.recorder
+}
+
+// Create mocks base method.
+func (m *MockIProductService) Create(name string, price float64) (application.IProduct, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", name, price)
+	ret0, _ := ret[0].(application.IProduct)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockIProductServiceMockRecorder) Create(name, price any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIProductService)(nil).Create), name, price)
+}
+
+// Disable mocks base method.
+func (m *MockIProductService) Disable(product application.IProduct) (application.IProduct, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Disable", product)
+	ret0, _ := ret[0].(application.IProduct)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Disable indicates an expected call of Disable.
+func (mr *MockIProductServiceMockRecorder) Disable(product any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Disable", reflect.TypeOf((*MockIProductService)(nil).Disable), product)
+}
+
+// Enable mocks base method.
+func (m *MockIProductService) Enable(product application.IProduct) (application.IProduct, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Enable", product)
+	ret0, _ := ret[0].(application.IProduct)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Enable indicates an expected call of Enable.
+func (mr *MockIProductServiceMockRecorder) Enable(product any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Enable", reflect.TypeOf((*MockIProductService)(nil).Enable), product)
+}
+
+// Get mocks base method.
+func (m *MockIProductService) Get(id string) (application.IProduct, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", id)
+	ret0, _ := ret[0].(application.IProduct)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get.
+func (mr *MockIProductServiceMockRecorder) Get(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockIProductService)(nil).Get), id)
+}
+
 // MockIProduct is a mock of IProduct interface.
 type MockIProduct struct {
 	ctrl     *gomock.Controller
@@ -134,6 +217,20 @@ func (m *MockIProduct) IsValid() error {
 func (mr *MockIProductMockRecorder) IsValid() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsValid", reflect.TypeOf((*MockIProduct)(nil).IsValid))
+}
+
+// String mocks base method.
+func (m *MockIProduct) String() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "String")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// String indicates an expected call of String.
+func (mr *MockIProductMockRecorder) String() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "String", reflect.TypeOf((*MockIProduct)(nil).String))
 }
 
 // MockIProductReader is a mock of IProductReader interface.
