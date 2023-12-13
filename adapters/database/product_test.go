@@ -2,6 +2,7 @@ package database_test
 
 import (
 	"database/sql"
+	"fmt"
 	"testing"
 
 	"github.com/felipefbs/hex-arch/adapters/database"
@@ -63,5 +64,43 @@ func TestProductDatabase(t *testing.T) {
 		assert.Equal(t, product2.ID, foundProduct.GetID())
 		assert.Equal(t, product2.Price, foundProduct.GetPrice())
 		assert.Equal(t, product2.Status, foundProduct.GetStatus())
+	})
+}
+
+func BenchmarkSave(b *testing.B) {
+	db := bootstrapTest()
+	defer db.Close()
+
+	productDB, ok := database.NewProductDatabase(db).(*database.ProductDatabase)
+	if !ok {
+		panic("Product database benchmark error")
+	}
+
+	b.Run("Just Updating", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			productDB.Save(&product1)
+		}
+	})
+
+	b.Run("Just Creating", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			product3 := application.NewProduct("product3", 10)
+
+			productDB.Save(product3)
+		}
+	})
+
+	b.Run("Just Updating new Save", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			productDB.SaveV1(&product1)
+		}
+	})
+
+	b.Run("Just Creating new Save", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			newProduct := application.NewProduct("product"+fmt.Sprint(i), 10)
+
+			productDB.SaveV1(newProduct)
+		}
 	})
 }

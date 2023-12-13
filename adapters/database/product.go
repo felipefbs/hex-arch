@@ -31,13 +31,26 @@ func (repo *ProductDatabase) Get(id string) (application.IProduct, error) {
 	return &productFound, nil
 }
 
-func (repo *ProductDatabase) Save(product application.IProduct) (application.IProduct, error) {
+func (repo *ProductDatabase) SaveV1(product application.IProduct) (application.IProduct, error) {
 	found, err := repo.Get(product.GetID())
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
 
 	if found == nil {
+		return repo.create(product)
+	}
+
+	return repo.update(product)
+}
+
+func (repo *ProductDatabase) Save(product application.IProduct) (application.IProduct, error) {
+	row := repo.db.QueryRow("SELECT id FROM products WHERE id = $1", product.GetID())
+	if row.Err() != nil && row.Err() != sql.ErrNoRows {
+		return nil, row.Err()
+	}
+
+	if row.Err() == sql.ErrNoRows {
 		return repo.create(product)
 	}
 
