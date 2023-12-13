@@ -45,12 +45,13 @@ func (repo *ProductDatabase) SaveV1(product application.IProduct) (application.I
 }
 
 func (repo *ProductDatabase) Save(product application.IProduct) (application.IProduct, error) {
-	row := repo.db.QueryRow("SELECT id FROM products WHERE id = $1", product.GetID())
-	if row.Err() != nil && row.Err() != sql.ErrNoRows {
-		return nil, row.Err()
+	id := ""
+	err := repo.db.QueryRow("SELECT id FROM products WHERE id = $1", product.GetID()).Scan(&id)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
 	}
 
-	if row.Err() == sql.ErrNoRows {
+	if err == sql.ErrNoRows {
 		return repo.create(product)
 	}
 
