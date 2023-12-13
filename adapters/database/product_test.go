@@ -34,18 +34,19 @@ func bootstrapTest() *sql.DB {
 }
 
 func TestProductDatabase(t *testing.T) {
-	db := bootstrapTest()
-	defer db.Close()
-
-	productDB := database.NewProductDatabase(db)
-
 	t.Run("Get product", func(t *testing.T) {
+		db := bootstrapTest()
+		productDB := database.NewProductDatabase(db)
+
 		foundProduct, err := productDB.Get(product1.ID)
 		assert.Nil(t, err)
 		assert.Equal(t, product1.ID, foundProduct.GetID())
 	})
 
 	t.Run("Saves a new product", func(t *testing.T) {
+		db := bootstrapTest()
+		productDB := database.NewProductDatabase(db)
+
 		product3 := application.NewProduct("product3", 10)
 		savedProduct, err := productDB.Save(product3)
 		assert.Nil(t, err)
@@ -53,6 +54,9 @@ func TestProductDatabase(t *testing.T) {
 	})
 
 	t.Run("Saves an already existing product", func(t *testing.T) {
+		db := bootstrapTest()
+		productDB := database.NewProductDatabase(db)
+
 		product2.Price = 20
 		product2.Status = application.Enabled
 		savedProduct, err := productDB.Save(&product2)
@@ -76,31 +80,31 @@ func BenchmarkSave(b *testing.B) {
 		panic("Product database benchmark error")
 	}
 
+	b.Run("Just Creating old Save", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			newProduct := application.NewProduct("product"+fmt.Sprint(i), 10)
+
+			productDB.SaveV1(newProduct)
+		}
+	})
+
+	b.Run("Just Creating", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			newProduct := application.NewProduct("product"+fmt.Sprint(i), 10)
+
+			productDB.Save(newProduct)
+		}
+	})
+
 	b.Run("Just Updating", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			productDB.Save(&product1)
 		}
 	})
 
-	b.Run("Just Creating", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			product3 := application.NewProduct("product3", 10)
-
-			productDB.Save(product3)
-		}
-	})
-
-	b.Run("Just Updating new Save", func(b *testing.B) {
+	b.Run("Just Updating old Save", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			productDB.SaveV1(&product1)
-		}
-	})
-
-	b.Run("Just Creating new Save", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			newProduct := application.NewProduct("product"+fmt.Sprint(i), 10)
-
-			productDB.SaveV1(newProduct)
 		}
 	})
 }
